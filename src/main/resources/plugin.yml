@@ -1,6 +1,8 @@
 name: CitiTrader
 main:  me.tehbeard.cititrader.CitiTrader
-version: BETA-2.0
+version: BETA-2.0.1
+author: Twillen
+authors: [tehbeard , tenowg]
 depend: [Citizens,Vault]
 softdepend: [Towny]
 commands:

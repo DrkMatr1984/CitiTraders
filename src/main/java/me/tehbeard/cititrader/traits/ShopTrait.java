@@ -8,8 +8,9 @@ import me.tehbeard.cititrader.CitiTrader;
 import me.tehbeard.cititrader.Trader;
 import me.tehbeard.cititrader.TraderInterface;
 import me.tehbeard.cititrader.TraderStatus;
+import me.tehbeard.cititrader.WalletTrait;
 import me.tehbeard.cititrader.TraderStatus.Status;
-import me.tehbeard.cititrader.traits.WalletTrait.WalletType;
+import me.tehbeard.cititrader.WalletTrait.WalletType;
 import me.tehbeard.cititrader.utils.TraderUtils;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.exception.NPCLoadException;
@@ -18,19 +19,16 @@ import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.util.DataKey;
 import net.citizensnpcs.api.util.ItemStorage;
 import net.citizensnpcs.util.Messaging;
-import net.milkbowl.vault.economy.EconomyResponse.ResponseType;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.block.Chest;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
 public class ShopTrait extends Trait implements TraderInterface {
@@ -689,7 +687,7 @@ public class ShopTrait extends Trait implements TraderInterface {
                 }
                 
 // start chest loop here
-                Inventory targetInv = null;
+               
                 //check space
 
                 if (npc.hasTrait(LinkedChestTrait.class)) {

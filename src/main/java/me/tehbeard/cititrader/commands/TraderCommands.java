@@ -7,9 +7,8 @@ package me.tehbeard.cititrader.commands;
 import me.tehbeard.cititrader.CitiTrader;
 import me.tehbeard.cititrader.Trader;
 import me.tehbeard.cititrader.TraderStatus;
+import me.tehbeard.cititrader.WalletTrait;
 import me.tehbeard.cititrader.traits.ShopTrait;
-import me.tehbeard.cititrader.traits.WalletTrait;
-import me.tehbeard.cititrader.utils.ArgumentPack;
 import net.citizensnpcs.Citizens;
 import net.citizensnpcs.Settings.Setting;
 import net.citizensnpcs.api.CitizensAPI;
@@ -202,11 +201,6 @@ public class TraderCommands {
     permission = "traders.command.setwallet")
     public void setWallet(CommandContext args, CommandSender sender, NPC npc) {
         String walltype = args.getString(1);
-        if (args == null) {
-            sender.sendMessage(ChatColor.RED + "Wallet Type needed!");
-            return;
-        }
-
         TraderStatus state = Trader.getStatus(((Player) sender).getName());
         WalletTrait.WalletType type = WalletTrait.WalletType.valueOf(walltype.toUpperCase());
         if (type == null) {

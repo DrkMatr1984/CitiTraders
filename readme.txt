@@ -1,10 +1,12 @@
-CitiTraders 0.1 Beta 4 README
+CitiTraders Beta 2.0.1 README
 
 In this release
 ===============
-* Bug fixes
-* Firing a trader
-* ability to switch off left and right click per NPC trader (config only)
+Fixed compatibility with bukkit 1.4.6
+Gave ops the ability to modified traders that they do not own (will make permission node later)
+Reworked help commands and error messages.
+
+
 
 Disclaimer:
 ===========
@@ -49,7 +51,7 @@ To create a trader, use the following command.
 Using Citizens:
   /npc create npcname --char trader ...Other options...
 using CitiTraders (allows prices  
-/trader create name -type [TYPE] 
+/trader create name  
 [TYPE] is an npc type set in the config.yml
 
 Stocking a trader

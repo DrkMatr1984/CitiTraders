@@ -6,7 +6,6 @@ package me.tehbeard.cititrader.traits;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Map.Entry;
 import me.tehbeard.cititrader.CitiTrader;
 import me.tehbeard.cititrader.LinkedChestInterface;
 import net.citizensnpcs.api.trait.Trait;

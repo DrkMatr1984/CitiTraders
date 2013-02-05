@@ -1,6 +1,5 @@
 package me.tehbeard.cititrader;
 
-import me.tehbeard.cititrader.traits.WalletTrait;
 import me.tehbeard.cititrader.traits.StockRoomTrait;
 import me.tehbeard.cititrader.traits.ShopTrait;
 import java.io.IOException;
@@ -11,17 +10,16 @@ import java.util.Map.Entry;
 import java.util.logging.Level;
 import me.tehbeard.cititrader.CitiTrader.Style;
 import me.tehbeard.cititrader.TraderStatus.Status;
+import me.tehbeard.cititrader.WalletTrait.WalletType;
 import me.tehbeard.cititrader.traits.LinkedChestTrait;
 import me.tehbeard.cititrader.traits.TraderTrait;
-import me.tehbeard.cititrader.traits.WalletTrait.WalletType;
 import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.event.CitizensEnableEvent;
-import net.citizensnpcs.api.event.NPCLeftClickEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.trait.Owner;
 import net.citizensnpcs.util.Messaging;
-import org.bukkit.Bukkit;
+
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -36,8 +34,6 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.ItemStack;
-import org.mcstats.Metrics;
-import org.mcstats.Metrics.Graph;
 
 /**
  * @author James
@@ -68,14 +64,14 @@ public class Trader implements Listener {
     public void onCitizensLoad(CitizensEnableEvent event) {
         try {
             Metrics metrics = new Metrics(CitiTrader.self);
-            Graph graph = metrics.createGraph("Traders");
+            me.tehbeard.cititrader.Metrics.Graph graph = metrics.createGraph("Traders");
             graph.addPlotter(new Metrics.Plotter("VI Traders") {
                 @Override
                 public int getValue() {
 
                     Integer totaltrader = 0;
                     try {
-                        Iterator it = CitizensAPI.getNPCRegistry().iterator();
+                        Iterator<NPC> it = CitizensAPI.getNPCRegistry().iterator();
                         while (it.hasNext()) {
                             NPC npcount = (NPC) it.next();
                             if (npcount.hasTrait(TraderTrait.class)) {
@@ -98,7 +94,7 @@ public class Trader implements Listener {
 
                     Integer totaltrader = 0;
                     try {
-                        Iterator it = CitizensAPI.getNPCRegistry().iterator();
+                        Iterator<NPC> it = CitizensAPI.getNPCRegistry().iterator();
                         while (it.hasNext()) {
                             NPC npcount = (NPC) it.next();
                             if (npcount.hasTrait(ShopTrait.class)) {
@@ -134,7 +130,6 @@ public class Trader implements Listener {
         }
 
         if (!CitizensAPI.getNPCRegistry().isNPC(event.getEntity())) {
-            //Bukkit.broadcastMessage("Failed Spot Two");
             return;
         }
 
@@ -187,7 +182,7 @@ public class Trader implements Listener {
         Player by = event.getPlayer();
 
         TraderStatus state = getStatus(by.getName());
-
+        //Bukkit.broadcastMessage(by.getName() + "State 1");
         if (state.getStatus().equals(Status.SELECT_LINK_CHEST)) {
             event.setCancelled(true);
             state.setChestLocation(event.getClickedBlock().getLocation());
@@ -207,6 +202,7 @@ public class Trader implements Listener {
     public void onRightClick(NPCRightClickEvent event) {
         NPC npc = event.getNPC();
         Player by = event.getClicker();
+
         if (!npc.hasTrait(ShopTrait.class)) {
             return;
         }
@@ -225,8 +221,9 @@ public class Trader implements Listener {
         TraderStatus state = getStatus(by.getName());
         state.setTrader(npc);
         String owner = npc.getTrait(Owner.class).getOwner();
-
-        if (by.getName().equalsIgnoreCase(owner)) {
+        
+        // TO DO: Add owner override
+        if (by.getName().equalsIgnoreCase(owner) || by.isOp()) {
 
             switch (state.getStatus()) {
                 case DISABLE: {
@@ -529,7 +526,6 @@ public class Trader implements Listener {
 
         }
 
-
         if (by.getName().equalsIgnoreCase(owner) && by.getItemInHand().getType() == Material.BOOK) {
             if (npc.hasTrait(LinkedChestTrait.class)) {
                 //if (npc.getTrait(LinkedChestTrait.class).hasLinkedChest()) {
@@ -589,9 +585,13 @@ public class Trader implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST)
     public void inventoryClick(InventoryClickEvent event) {
         TraderStatus state = getStatus(event.getWhoClicked().getName());
-
-        if (state.getStatus() != Status.NOT) {
-            state.getTrader().getTrait(ShopTrait.class).processInventoryClick(event);
+        try{
+	        if (state.getStatus() != Status.NOT) {
+	            state.getTrader().getTrait(ShopTrait.class).processInventoryClick(event);
+	        }
+        }
+        catch(Exception e){
+        	CitiTrader.self.getLogger().warning(e.toString() + " " + event.getWhoClicked().getName().toString() + state.toString());
         }
     }
 
@@ -603,7 +603,12 @@ public class Trader implements Listener {
     public void inventoryClose(InventoryCloseEvent event) {
         TraderStatus state = getStatus(event.getPlayer().getName());
         if (state.getStatus() != Status.NOT) {
-            state.getTrader().getTrait(ShopTrait.class).processInventoryClose(event);
+        	try {
+        		state.getTrader().getTrait(ShopTrait.class).processInventoryClose(event);
+				
+			} catch (Exception e) {
+				CitiTrader.self.getLogger().warning(e.toString() + " " + event.getPlayer().getName().toString() + state.toString() );
+			}
         }
     }
 
