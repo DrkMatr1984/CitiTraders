@@ -16,11 +16,11 @@ import net.citizensnpcs.api.event.PlayerCreateNPCEvent;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.trait.MobType;
 import net.citizensnpcs.api.trait.trait.Owner;
-import net.citizensnpcs.command.Command;
-import net.citizensnpcs.command.CommandContext;
-import net.citizensnpcs.command.Requirements;
+import net.citizensnpcs.api.util.Messaging;
+import net.citizensnpcs.api.command.Command;
+import net.citizensnpcs.api.command.CommandContext;
+import net.citizensnpcs.api.command.Requirements;
 import net.citizensnpcs.util.Messages;
-import net.citizensnpcs.util.Messaging;
 import net.citizensnpcs.util.StringHelper;
 import net.citizensnpcs.util.Util;
 import org.bukkit.Bukkit;
@@ -61,7 +61,7 @@ public class TraderCommands {
     min = 2,
     permission = "traders.command.create")
     public void create(CommandContext args, CommandSender sender, NPC npc) {
-        String name = StringHelper.parseColors(args.getJoinedStrings(1));
+        String name = StringHelper.wrap(args.getJoinedStrings(1));
         if (name.length() > 16) {
             Messaging.sendErrorTr(sender, Messages.NPC_NAME_TOO_LONG);
             name = name.substring(0, 15);

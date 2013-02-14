@@ -1,8 +1,12 @@
-CitiTraders Beta 2.0.1 README
+CitiTraders Beta 2.0.2 README
 
 In this release
 ===============
-Fixed compatibility with bukkit 1.4.6
+Fixed compatibility with bukkit 1.4.7 R1 and Citizens 2.0.7 alpha
+
+
+Release 2.0.1:
+=============
 Gave ops the ability to modified traders that they do not own (will make permission node later)
 Reworked help commands and error messages.
 

@@ -18,7 +18,8 @@ import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.util.DataKey;
 import net.citizensnpcs.api.util.ItemStorage;
-import net.citizensnpcs.util.Messaging;
+import net.citizensnpcs.api.util.Messaging;
+
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -734,7 +735,7 @@ public class ShopTrait extends Trait implements TraderInterface {
     }
 
     public void buildSellWindow(final ItemStack item, final TraderStatus state) {
-        CitiTrader.self.getServer().getScheduler().scheduleAsyncDelayedTask(CitiTrader.self, new Runnable() {
+        CitiTrader.self.getServer().getScheduler().runTaskLaterAsynchronously(CitiTrader.self, new Runnable() {
             @Override
             public void run() {
                 ItemStack is = item.clone();
@@ -786,8 +787,8 @@ public class ShopTrait extends Trait implements TraderInterface {
         //System.out.println("ITEM SELECTED");
     }
 
-    public void buildSalesWindow(final Inventory inv) {
-        CitiTrader.self.getServer().getScheduler().scheduleAsyncDelayedTask(CitiTrader.self, new Runnable() {
+    public void buildSalesWindow(final Inventory inv) {//scheduleAsyncDelayedTask
+        CitiTrader.self.getServer().getScheduler().runTaskAsynchronously(CitiTrader.self, new Runnable() {
             @Override
             public void run() {
                 //clear the inventory

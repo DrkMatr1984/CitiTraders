@@ -18,7 +18,7 @@ import net.citizensnpcs.api.event.CitizensEnableEvent;
 import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.trait.Owner;
-import net.citizensnpcs.util.Messaging;
+import net.citizensnpcs.api.util.Messaging;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
