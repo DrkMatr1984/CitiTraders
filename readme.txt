@@ -1,6 +1,24 @@
-CitiTraders Beta 2.0.2 README
+CitiTraders Beta 2.0.3 README
+Bukkit 1.4.7 R1 and Citizens 2.0.7 alpha
 
-In this release
+In this release 
+===============
+Add auto checking of  dev.bukkit.org for new releases of CitiTraders2
+Updated admins wallet to prevent the storage of user sold items.
+Allow admins to use /trader commands on npc they do not own.
+Fixed /Trader fire from continuing firing traders after the first one.
+
+New Permission nodes:
+traders.admin.*
+traders.admin.overRideOwner
+traders.admin.loginVersionCheck
+
+New Configuration value:
+Check-For-Updates
+When true allows the CitiTraders2 to check dev.bukkit.org for current release.
+
+
+Release 2.0.2
 ===============
 Fixed compatibility with bukkit 1.4.7 R1 and Citizens 2.0.7 alpha
 

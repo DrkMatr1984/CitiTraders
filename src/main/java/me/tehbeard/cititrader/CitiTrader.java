@@ -7,6 +7,7 @@ import java.util.jar.Attributes;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+//import me.tehbeard.cititrader.commands.CitiCommands;
 import me.tehbeard.cititrader.commands.CitiCommands;
 import me.tehbeard.cititrader.traits.LinkedChestTrait;
 import me.tehbeard.cititrader.traits.ShopTrait;
@@ -18,13 +19,13 @@ import net.citizensnpcs.api.trait.TraitInfo;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import com.twillen.cititrader.utils.CheckForUpdates;
 
 /**
  * Provides a trader for
@@ -40,11 +41,12 @@ public class CitiTrader extends JavaPlugin {
 	public static boolean outdated = false;
 	public static boolean isTowny = false;
 	public static Attributes atts;
+	public static String strVersionCheck = "";
 	private FileConfiguration profiles = null;
 	private File profilesFile = null;
 	private FileConfiguration languages = null;
 	private File languageFile = null;
-	private CitiCommands commands;
+	private CheckForUpdates updateTask = null;
 
 	@Override
 	public void onEnable() {
@@ -73,22 +75,27 @@ public class CitiTrader extends JavaPlugin {
 		CitizensAPI.getTraitFactory().registerTrait(
 				TraitInfo.create(TraderTrait.class).withName("villagetrader"));
 
+		//Set up checking of updates
+		if (getConfig().getBoolean("Check-For-Updates", true)) {
+			//Runs once an hour
+			updateTask = new CheckForUpdates(this);
+			this.getServer().getScheduler().runTaskTimerAsynchronously(this, updateTask, 0, 60 * 1200);
+		}
+		else{
+			CitiTrader.strVersionCheck = "New release checking disabled.";
+		}
 		//registerCommands();
-
-		commands = new CitiCommands(this);
-		//getCommand("trader").setExecutor(commands);
+		getCommand("trader").setExecutor(new CitiCommands(this));
 		Bukkit.getPluginManager().registerEvents(new Trader(), this);
-
 		getLogger().log(Level.INFO, "v{0} loaded",
 				getDescription().getVersion());
 	}
 
 	@Override
-	public boolean onCommand(CommandSender sender, Command cmd, String cmdName,
-			String[] args) {
-		return commands.onCommand(sender, cmd, "", args);
+	public void onDisable(){
+		saveConfig();
+		saveProfiles();
 	}
-
 	private boolean setupEconomy() {
 		RegisteredServiceProvider<Economy> economyProvider = getServer()
 				.getServicesManager().getRegistration(
@@ -264,12 +271,6 @@ public class CitiTrader extends JavaPlugin {
 		}
 	}
 
-	public void checkVersion() {
-		/*
-		 * Removed for the site is no more. }
-		 */
-	}
-
 	public boolean isMayorOrAssistant(Player player) {
 		if (!CitiTrader.isTowny) {
 			return false;
@@ -333,4 +334,18 @@ public class CitiTrader extends JavaPlugin {
 
 		return null;
 	}
+
+	
+	public void checkVersion() {
+		if(updateTask == null)
+			return;
+		strVersionCheck = updateTask.strVersionCheck;
+	}
+	
+	public void forceVersionCheck(){
+		if(updateTask == null)
+			return;
+		updateTask.run();
+	}
+	
 }

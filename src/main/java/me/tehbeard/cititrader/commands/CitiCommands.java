@@ -48,20 +48,18 @@ public class CitiCommands implements CommandExecutor {
             subCom = Subcommand.valueOf(args[0]);
         } catch (Exception e) {
         	this.citiTraderTextHelp(sender);
-            return true;
+            return false;
         }
 
         Player player = (Player) sender;
         if (!sender.hasPermission(cmdRoot + args[0])) {
             sender.sendMessage(CitiTrader.self.getLang().getString("error.noperm"));
             //sender.sendMessage("No permision for: " + cmdRoot + args[0] );
-            return true;
+            return false;
         }
         switch (subCom) {
             case create: 
-            	if (sender.hasPermission(cmdRoot + "create"))
-            		return create(sender, command, label, args);
-            break;
+            	return create(sender, command, label, args);
             case sellprice: {
                 if (args.length == 2) {
                     TraderStatus state = Trader.getStatus(((Player) sender).getName());
@@ -83,7 +81,7 @@ public class CitiCommands implements CommandExecutor {
                     sender.sendMessage(ChatColor.DARK_PURPLE + "Now right click with item to finish.");
                 }
                 else
-                	sender.sendMessage(ChatColor.YELLOW + "Proper usage is: /trader sellprice <amount>");
+                	sender.sendMessage(ChatColor.YELLOW + "Proper usage is: /trader sellprice <amount | remove>");
                 return true;
             }
 
@@ -101,6 +99,7 @@ public class CitiCommands implements CommandExecutor {
                     if (args[1].equalsIgnoreCase("remove")) {
                         price = -1;
                     } else {
+                    	//TO DO: Add try
                         price = Double.parseDouble(args[1]);
                     }
                     state.setMoney(price);
@@ -108,7 +107,7 @@ public class CitiCommands implements CommandExecutor {
                     return true;
                 }
                 else
-                	sender.sendMessage(ChatColor.YELLOW + "Proper usage is: /trader buyprice <amount>");
+                	sender.sendMessage(ChatColor.YELLOW + "Proper usage is: /trader buyprice <amount | remove>");
                 return true;
             }
 
@@ -117,10 +116,14 @@ public class CitiCommands implements CommandExecutor {
                     sender.sendMessage(ChatColor.RED + "Wallet Type needed!");
                     return true;
                 }
-                TraderStatus state = Trader.getStatus(((Player) sender).getName());
-                WalletTrait.WalletType type = WalletTrait.WalletType.valueOf(args[1].toUpperCase());
-                if (type == null) {
-                    sender.sendMessage(ChatColor.RED + "Invalid Wallet Type!");
+                
+                TraderStatus state = Trader.getStatus(((Player) sender).getName());                
+                WalletTrait.WalletType type;
+                
+                try {
+                	type = WalletTrait.WalletType.valueOf(args[1].toUpperCase());
+                } catch (Exception e) {
+                	sender.sendMessage(ChatColor.RED + "Invalid Wallet Type!");
                     return true;
                 }
 
@@ -149,11 +152,6 @@ public class CitiCommands implements CommandExecutor {
                     }
                     state.setAccName(bank);
 
-                }
-
-                if (!type.hasPermission(sender)) {
-                    sender.sendMessage(ChatColor.RED + "You don't have permission to use this wallet type!");
-                    return true;
                 }
 
                 state.setStatus(TraderStatus.Status.SET_WALLET);
@@ -218,6 +216,10 @@ public class CitiCommands implements CommandExecutor {
             case version: {
                 player.sendMessage("Running Cititraders version: " + plugin.getDescription().getVersion());
                 //player.sendMessage("With build number: " + CitiTrader.atts.getValue("Build-Tag"));
+                if(CitiTrader.self.getConfig().getBoolean("Check-For-Updates", true)){
+                	CitiTrader.self.checkVersion();
+                	player.sendMessage(CitiTrader.strVersionCheck);
+                }
                 return true;
             }
             case reloadprofiles: {
@@ -312,40 +314,56 @@ public class CitiCommands implements CommandExecutor {
     }
 
     private void citiTraderTextHelp(CommandSender sender) {
-		// TODO Auto-generated method stub
 		sender.sendMessage("Uknown subcommand, commands are:");
+		
 		if (sender.hasPermission(cmdRoot + "buyprice"))
-			sender.sendMessage("/trader buyprice <amount>");
-			// sender.sendMessage("/trader buystack");
-		sender.sendMessage("/trader cancel");
+			sender.sendMessage("/trader buyprice <amount | remove>");
+		
+		if(sender.hasPermission(cmdRoot + "cancel"))
+			sender.sendMessage("/trader cancel");
+		
 		if (sender.hasPermission(cmdRoot + "create"))
 			sender.sendMessage("/trader create <npcname>");
+		
 		if (sender.hasPermission(cmdRoot + "disable"))
 			sender.sendMessage("/trader disable");
+		
 		if (sender.hasPermission(cmdRoot + "enable"))
 			sender.sendMessage("/trader enable");
+		
 		if (sender.hasPermission(cmdRoot + "fire"))
 			sender.sendMessage("/trader fire");
+		
 		if (sender.hasPermission(cmdRoot + "link"))
 			sender.sendMessage("/trader link [name]");
+		
 		if (sender.hasPermission(cmdRoot + "linkchest"))
 			sender.sendMessage("/trader linkchest");
+		
 		if (sender.hasPermission(cmdRoot + "list"))
 			sender.sendMessage("/trader list [buy|sell]");
+		
 		if (sender.hasPermission(cmdRoot + "reloadprofiles"))
 			sender.sendMessage("/trader reloadprofiles");
+		
 		if (sender.hasPermission(cmdRoot + "removelink"))
 			sender.sendMessage("/trader removelink");
+		
 		if (sender.hasPermission(cmdRoot + "sellprice"))
-			sender.sendMessage("/trader sellprice");
+			sender.sendMessage("/trader sellprice <amount | remove>");
+		
 		if (sender.hasPermission(cmdRoot + "sellstack"))
 			sender.sendMessage("/trader sellstack [size]");
+		
 		if (sender.hasPermission(cmdRoot + "setwallet"))
 			sender.sendMessage("/trader setwallet [admin|owner|bank|town_bank|private]");
+		
 		if (sender.hasPermission(cmdRoot + "unlinkchest"))
 			sender.sendMessage("/trader unlinkchest");
+		
 		if (sender.hasPermission(cmdRoot + "version"))
 			sender.sendMessage("/trader version");
+		
 		if (sender.hasPermission(cmdRoot + "wallet"))
 			sender.sendMessage("/trader wallet <balance|give|take> <amount>");
  }

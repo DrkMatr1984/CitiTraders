@@ -9,7 +9,7 @@ trader-types:
 - WOLF
 - IRON_GOLEM
 - VILLAGER
+Check-For-Updates: true
 debug:
   tradercount: false
-  versioncheck: true
 language: en

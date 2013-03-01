@@ -1,8 +1,8 @@
 name: CitiTrader
 main:  me.tehbeard.cititrader.CitiTrader
-version: BETA-2.0.2
+version: BETA-2.0.3
 author: Twillen
-authors: [tehbeard , tenowg]
+authors: [tehbeard , tenowg, twillen]
 depend: [Citizens,Vault]
 softdepend: [Towny]
 commands:
@@ -13,7 +13,20 @@ commands:
     aliases: ctrader
     description: CitiTrader commands 
     usage: /<command> subcommand
+    permission-message: You don't have <permission>
 permissions:
+  traders.admin.*:
+    description: Grants all admin roles
+    default: op
+    children:
+      traders.admin.overRideOwner: true
+      traders.admin.loginVersionCheck: true
+  traders.admin.overRideOwner:
+    description: Allows the modification of other users traders
+    default: op
+  traders.admin.loginVersionCheck:
+    description: Informs the user about new versions of CittiTrader
+    default: op
   traders.command.*:
     description: Grants access to all trader commands
     default: op
@@ -77,22 +90,22 @@ permissions:
     default: op
   traders.command.linkchest:
     description: Link a chest to an NPC
-    default: true
+    default: op
   traders.command.unlinkchest:
     description: Unlink a chest from an NPC
-    default: true
+    default: op
   traders.command.disable:
     description: Close a Shop to the public.
-    default: true
+    default: op
   traders.command.enable:
     description: Open a Shop to the Public.
-    default: true
+    default: op
   traders.command.sellstack:
     description: Sell a stack, instead of one at a time.
     default: op
   traders.command.list:
     description: List the Buy/Sell prices of an NPC.
-    default: true
+    default: op
   traders.command.setinv:
     description: Sets various options on an NPC inventory.
     default: op
@@ -112,5 +125,5 @@ permissions:
     description: Allows user to set the traders to use a town bank (TOWNY PLUGIN MUST BE INSTALLED)
     default: true
   traders.wallet.admin:
-    description: Allows user to set traders to use a bank account (ECONOMY PLUGIN MUST SUPPORT BANKS, USER MUST OWN BANK ACCOUNT).
+    description: Allows user to set traders to use the admin bank account ( (MAYBE) ECONOMY PLUGIN MUST SUPPORT BANKS, USER MUST OWN BANK ACCOUNT).
     default: op

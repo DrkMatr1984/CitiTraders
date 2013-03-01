@@ -59,7 +59,11 @@ public class Trader implements Listener {
     public Trader() {
         status = new HashMap<String, TraderStatus>();
     }
-
+    
+    public static boolean hasOwnership(Player player, String owner){
+    	return (player.getName().equalsIgnoreCase(owner) || player.hasPermission("traders.admin.overRideOwner"));
+    }
+    
     @EventHandler
     public void onCitizensLoad(CitizensEnableEvent event) {
         try {
@@ -118,8 +122,12 @@ public class Trader implements Listener {
             e.printStackTrace();
         }
 
-        if (CitiTrader.self.getConfig().getBoolean("debug.versioncheck", true)) {
+        if (CitiTrader.self.getConfig().getBoolean("Check-For-Updates", true)) {
             CitiTrader.self.checkVersion();
+            CitiTrader.self.getLogger().log(Level.INFO, CitiTrader.strVersionCheck);
+        }
+        else{
+        	CitiTrader.self.getLogger().log(Level.INFO, "New release checking disabled.");
         }
     }
 
@@ -223,7 +231,7 @@ public class Trader implements Listener {
         String owner = npc.getTrait(Owner.class).getOwner();
         
         // TO DO: Add owner override
-        if (by.getName().equalsIgnoreCase(owner) || by.isOp()) {
+        if (Trader.hasOwnership(by, owner)) {
 
             switch (state.getStatus()) {
                 case DISABLE: {
@@ -266,6 +274,8 @@ public class Trader implements Listener {
                     npc.removeTrait(ShopTrait.class);
                     npc.removeTrait(WalletTrait.class);
                     npc.destroy();
+                    status.remove(by.getName());
+                    return;
                 }
                 case SET_PRICE_SELL: {
                     if (!isShop(state.getTrader())) {
@@ -526,7 +536,7 @@ public class Trader implements Listener {
 
         }
 
-        if (by.getName().equalsIgnoreCase(owner) && by.getItemInHand().getType() == Material.BOOK) {
+        if (Trader.hasOwnership(by, owner) && by.getItemInHand().getType() == Material.BOOK) {
             if (npc.hasTrait(LinkedChestTrait.class)) {
                 //if (npc.getTrait(LinkedChestTrait.class).hasLinkedChest()) {
                     by.sendMessage(ChatColor.RED + CitiTrader.self.getLang().getString("chest.haslinkedstock"));
@@ -614,8 +624,8 @@ public class Trader implements Listener {
 
     @EventHandler
     public void onPlayerLogin(PlayerJoinEvent event) {
-        if (event.getPlayer().isOp() && CitiTrader.outdated) {
-            event.getPlayer().sendMessage(ChatColor.GOLD + "Your version of Cititraders(" + CitiTrader.self.getDescription().getVersion() + ") is outdated, please update.");
+        if (event.getPlayer().hasPermission("traders.admin.loginVersionCheck") && CitiTrader.outdated) {
+            event.getPlayer().sendMessage(ChatColor.GOLD + CitiTrader.strVersionCheck);
         }
     }
 }

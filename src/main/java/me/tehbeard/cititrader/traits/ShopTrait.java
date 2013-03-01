@@ -690,8 +690,11 @@ public class ShopTrait extends Trait implements TraderInterface {
 // start chest loop here
                
                 //check space
-
-                if (npc.hasTrait(LinkedChestTrait.class)) {
+                	
+                if(wallet.getType() == WalletType.ADMIN){
+                	//Don't add purchased item into inventory.
+                	//((CommandSender) event.getPlayer()).sendMessage(ChatColor.RED + "The admins destroy your item in return for money");
+                } else if (npc.hasTrait(LinkedChestTrait.class)) {
                     if (npc.getTrait(LinkedChestTrait.class).hasSpace(is)) {
                         npc.getTrait(LinkedChestTrait.class).addItem(is);
                     } else {
