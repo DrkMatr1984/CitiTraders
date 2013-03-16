@@ -1,7 +1,15 @@
-CitiTraders Beta 2.0.3 README
-Bukkit 1.4.7 R1 and Citizens 2.0.7 alpha
+CitiTraders Beta 2.0.4 README
+Bukkit 1.4.7 R1 and Citizens 2.0.7 beta
 
 In this release 
+===============
+Improved text on potion sell / buy list.
+
+Ability to enable experimental support for items with meta data.
+In the config file, BetaMetaDataSupport true will allow for written books, renamed items.
+These items will work until the server is reloaded.
+
+Release 2.0.3
 ===============
 Add auto checking of  dev.bukkit.org for new releases of CitiTraders2
 Updated admins wallet to prevent the storage of user sold items.

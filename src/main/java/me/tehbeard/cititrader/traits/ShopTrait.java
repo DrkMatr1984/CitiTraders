@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.logging.Level;
+
 import me.tehbeard.cititrader.CitiTrader;
 import me.tehbeard.cititrader.Trader;
 import me.tehbeard.cititrader.TraderInterface;
@@ -62,7 +64,9 @@ public class ShopTrait extends Trait implements TraderInterface {
         for (DataKey priceKey : data.getRelative("prices").getIntegerSubKeys()) {
             //System.out.println("price listing found");
             ItemStack k = ItemStorage.loadItemStack(priceKey.getRelative("item"));
-            //System.out.println(k);
+            if (CitiTrader.self.getConfig().getBoolean("debug.debugText", false)) {
+            	System.out.println(k.toString());
+            }
             double price = priceKey.getDouble("price");
             int stacksize = priceKey.getInt("stack", 1);
             //System.out.println(price);
@@ -83,7 +87,9 @@ public class ShopTrait extends Trait implements TraderInterface {
                 priceKey.setString("item.id", mat.name());
                 k = ItemStorage.loadItemStack((priceKey.getRelative("item")));
             }
-            //System.out.println(k);
+            if (CitiTrader.self.getConfig().getBoolean("debug.debugText", false)) {
+            	System.out.println(k);
+            }
             double price = priceKey.getDouble("price");
             int stacksize = priceKey.getInt("stack", 1);
             //System.out.println(price);
@@ -123,18 +129,31 @@ public class ShopTrait extends Trait implements TraderInterface {
         data.removeKey("prices");
         DataKey sellPriceIndex = data.getRelative("prices");
 
-        int i = 0;
-        for (Entry<ItemStack, Double> price : sellPrices.entrySet()) {
-            if (price.getValue() > 0.0D) {
-                ItemStorage.saveItem(sellPriceIndex.getRelative("" + i).getRelative("item"), price.getKey());
-                if (stackSizes.containsKey(price.getKey())) {
-                    sellPriceIndex.getRelative("" + i).setInt("stack", stackSizes.get(price.getKey()));
-                } else {
-                    sellPriceIndex.getRelative("" + i).setInt("stack", 1);
-                }
-                sellPriceIndex.getRelative("" + i++).setDouble("price", price.getValue());
-            }
-        }
+		int i = 0;
+		for (Entry<ItemStack, Double> price : sellPrices.entrySet()) {
+			try {
+				if (price.getValue() > 0.0D) {
+					ItemStorage.saveItem(sellPriceIndex.getRelative("" + i)
+							.getRelative("item"), price.getKey());
+					if (stackSizes.containsKey(price.getKey())) {
+						sellPriceIndex.getRelative("" + i).setInt("stack",
+								stackSizes.get(price.getKey()));
+					} else {
+						sellPriceIndex.getRelative("" + i).setInt("stack", 1);
+					}
+					sellPriceIndex.getRelative("" + i).setDouble("price",
+							price.getValue());
+
+				}
+			} catch (Exception e) {
+				CitiTrader.self.getLogger().log(Level.WARNING,"Failed to save item: " 
+					+ sellPriceIndex.getRelative("" + i).getRelative("item"));
+			}
+			finally{
+				i++;
+			}
+
+		}
 
 
         data.removeKey("buyprices");
@@ -423,7 +442,9 @@ public class ShopTrait extends Trait implements TraderInterface {
                 //event.setCancelled(true);
                 //}
                 if (event.isLeftClick()) {
-
+                	if (CitiTrader.self.getConfig().getBoolean("debug.debugText", false)) {
+                		System.out.println(event.getCurrentItem().clone());
+                	}
                     buildSellWindow(event.getCurrentItem().clone(), state);
                 } else {
                     Player p = (Player) event.getWhoClicked();
@@ -751,7 +772,9 @@ public class ShopTrait extends Trait implements TraderInterface {
                 int k = 0;
                 ItemStack newIs = is.clone();
                 int in = 1;
-                //System.out.println(newIs.toString());
+                if (CitiTrader.self.getConfig().getBoolean("debug.debugText", false)) {
+                	System.out.println(newIs.toString());
+                }
                 newIs.setAmount(1);
                 if (stackSizes.containsKey(newIs)) {
 
@@ -786,8 +809,6 @@ public class ShopTrait extends Trait implements TraderInterface {
                 state.setStatus(Status.AMOUNT_SELECT);
             }
         }, 2l);
-
-        //System.out.println("ITEM SELECTED");
     }
 
     public void buildSalesWindow(final Inventory inv) {//scheduleAsyncDelayedTask
@@ -807,8 +828,17 @@ public class ShopTrait extends Trait implements TraderInterface {
                                     if (is == null) {
                                         continue;
                                     }
-                                    ItemStack chk = new ItemStack(is.getType(), 1, is.getDurability());
-                                    chk.addEnchantments(is.getEnchantments());
+                                    ItemStack chk;
+                                    if (CitiTrader.self.getConfig().getBoolean("debug.BetaMetaDataSupport", false)) {
+                                    	chk = is.clone();
+                                    }
+                                    else{
+                                        chk = new ItemStack(is.getType(), 1, is.getDurability());
+                                        chk.addEnchantments(is.getEnchantments());
+                                    }
+                                    if (CitiTrader.self.getConfig().getBoolean("debug.debugText", false)) {
+                                    	 System.out.println(chk.toString() + is.toString());
+                                    }
                                     if (inv.contains(chk) == false && getSellPrice(is) > 0.0D) {
                                         inv.addItem(chk);
                                     }
@@ -818,7 +848,9 @@ public class ShopTrait extends Trait implements TraderInterface {
                             }
                         } else {
                             // warn if owner is online, chest doesn't exist.
-                            //System.out.println("Chest doesn't exist: " + loc.getKey().getBlock().getType().toString());
+                        	if (CitiTrader.self.getConfig().getBoolean("debug.debugText", false)) {
+                        		System.out.println("Chest doesn't exist: " + loc.getKey().getBlock().getType().toString());
+                        	}
                         }
                     }
                 } else {
@@ -827,9 +859,18 @@ public class ShopTrait extends Trait implements TraderInterface {
                                 == null) {
                             continue;
                         }
-                        ItemStack chk = new ItemStack(is.getType(), 1, is.getDurability());
-
-                        chk.addEnchantments(is.getEnchantments());
+                        ItemStack chk;
+                        if (CitiTrader.self.getConfig().getBoolean("debug.BetaMetaDataSupport", false)) {
+                        	chk = is.clone();
+                        }
+                        else{
+                            chk = new ItemStack(is.getType(), 1, is.getDurability());
+                            chk.addEnchantments(is.getEnchantments());
+                        }
+                        if (CitiTrader.self.getConfig().getBoolean("debug.debugText", false)) {
+                        	System.out.println(chk.toString() + is.toString());
+                        }
+                        //chk.addEnchantments(is.getEnchantments());
                         if (inv.contains(chk)
                                 == false && getSellPrice(is) > 0.0D) {
                             inv.addItem(chk);

@@ -19,6 +19,8 @@ import net.citizensnpcs.api.event.NPCRightClickEvent;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.trait.Owner;
 import net.citizensnpcs.api.util.Messaging;
+import net.milkbowl.vault.item.ItemInfo;
+import net.milkbowl.vault.item.Items;
 
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -497,7 +499,21 @@ public class Trader implements Listener {
                     Map<ItemStack, Double> price = state.getTrader().getTrait(ShopTrait.class).getSellPrices();
                     by.sendMessage(ChatColor.GOLD + CitiTrader.self.getLang().getString("price.sellprices"));
                     for (Entry<ItemStack, Double> item : price.entrySet()) {
-                        by.sendMessage(ChatColor.YELLOW + item.getKey().getType().name() + "   " + ChatColor.GREEN + item.getValue());
+                    	String itemName =  item.getKey().getType().name();
+                    	if(itemName == "POTION"){
+                    		if(item.getKey().hasItemMeta()){
+                    			itemName = item.getKey().getItemMeta().getDisplayName();
+                    		}
+                    		else{
+                    			ItemInfo spoutName = Items.itemByType(Material.POTION, item.getKey().getDurability());
+                    			if(spoutName == null)
+                    				itemName = itemName + " " + item.getKey().getDurability();
+                    			else
+                    				itemName = spoutName.getName();
+                    		}
+                    		
+                    	}
+                        by.sendMessage(ChatColor.YELLOW + itemName + "   " + ChatColor.GREEN + item.getValue());
                     }
                     status.remove(by.getName());
                     return;

@@ -10,6 +10,8 @@ trader-types:
 - IRON_GOLEM
 - VILLAGER
 Check-For-Updates: true
+BetaMetaDataSupport: false
 debug:
   tradercount: false
+  debugText: false
 language: en
