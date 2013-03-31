@@ -29,7 +29,7 @@ public class CheckForUpdates implements Runnable {
 			 * http://forums.bukkit.org/threads/update-checker-simple-method
 			 * -for-copying-and-pasting.125833/
 			 */
-			String version = this.plugin.getDescription().getVersion();
+			String version = this.plugin.getDescription().getVersion().replaceAll("[^\\d.]", "");
 			// Remove the [url="http:// part, as that is BBCode's fault
 			URL url = new URL(urlString);
 			InputStreamReader isr = null;
@@ -43,28 +43,27 @@ public class CheckForUpdates implements Runnable {
 			int lineNum = 0;
 			while ((line = in.readLine()) != null) {
 				if (line.length() != line.replace("<title>", "").length()) {
-					// Substring 1 for me, takes off the beginning v on my file
-					// name "v1.3.2"
-					line = line.replaceAll("<title>", "")
-							.replaceAll("</title>", "").replaceAll("	", "")
-							.replaceAll("CitiTrader", "")
-							.replaceAll("_BETA-", "");
+					// line like CitiTrader_BETA-2.0.4  will become 204
+					line = line.replaceAll("[^\\d.]", "");
 					if (lineNum == 1) {
-						Integer newVer = Integer
-								.parseInt(line.replace(".", ""));
-						Integer oldVer = Integer.parseInt(version.replace(".",
-								"").replaceAll("BETA-", ""));
-						if (oldVer < newVer) {
-							CitiTrader.outdated = true;
-							// They are using an old version
-							strVersionCheck = "Your CitiTrader is out of date. The newest version of CitiTrader is "
-									+ line;
-						} else if (oldVer > newVer) {
-							// They are using a FUTURE version!
-							strVersionCheck = "You are on a development version";
-						} else {
-							// They are up to date!
-							strVersionCheck = "You are on the current version.";
+						try {
+							Integer newVer = Integer.parseInt(line.replace(".",""));
+							Integer oldVer = Integer.parseInt(version.replace(".",""));
+							if(oldVer == newVer){
+								strVersionCheck = "You are on the current version.";
+							}
+							else if (oldVer < newVer) {
+								CitiTrader.outdated = true;
+								// They are using an old version
+								strVersionCheck = "Your CitiTrader is out of date. The newest version of CitiTrader is "
+										+ line;
+							} 
+							else{
+								// They are using a FUTURE version!
+								strVersionCheck = "You are on a development version";
+							}
+						} catch (Exception e) {
+							strVersionCheck = "Twillen mislabeled the new file again...";
 						}
 					}
 					lineNum = lineNum + 1;
@@ -72,7 +71,7 @@ public class CheckForUpdates implements Runnable {
 			}
 			in.close();
 		} catch (IOException e) {
-			strVersionCheck = "Was unable to find current release.";
+			strVersionCheck = "Unable to find current release.";
 		}
 
 	}

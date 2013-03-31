@@ -112,7 +112,7 @@ public class Trader implements Listener {
                         e.printStackTrace();
                     }
                     if (CitiTrader.self.getConfig().getBoolean("debug.tradercount", false)) {
-                        CitiTrader.self.getLogger().log(Level.INFO, "VI Traders: {0}", totaltrader);
+                        CitiTrader.self.getLogger().log(Level.INFO, "Shop Traders: {0}", totaltrader);
                     }
                     return totaltrader;
                 }
@@ -185,7 +185,7 @@ public class Trader implements Listener {
             return;
         }
 
-        if (!event.getClickedBlock().getType().equals(Material.CHEST)) {
+        if (!LinkedChestTrait.isValidChest(event.getClickedBlock().getType())) {
             return;
         }
 
@@ -235,6 +235,12 @@ public class Trader implements Listener {
         // TO DO: Add owner override
         if (Trader.hasOwnership(by, owner)) {
 
+        	if(by.getItemInHand().getType() == Material.STICK){
+        		if(state.getStatus().equals(Status.SET_PRICE_SELL)&& state.getStatus().equals(Status.SET_PRICE_BUY) ){
+        			by.sendMessage("Please remove the stick from your hand to continue.");
+        			return;
+        		}
+        	}
             switch (state.getStatus()) {
                 case DISABLE: {
                     if (!isShop(state.getTrader())) {

@@ -57,7 +57,7 @@ public class LinkedChestTrait extends Trait implements LinkedChestInterface {
         i = 0;
         for (Map.Entry<Location, String> chest : linkedChests.entrySet()) {
             Material type = chest.getKey().getBlock().getType();
-            if (type.equals(Material.CHEST) || type.equals(Material.ENDER_CHEST)) {
+            if (isValidChest(type)) {
                 DataKey chestdata = chestsKey.getRelative("" + i).getRelative("location");
                 chestdata.setInt("X", chest.getKey().getBlockX());
                 chestdata.setInt("Y", chest.getKey().getBlockY());
@@ -79,7 +79,7 @@ public class LinkedChestTrait extends Trait implements LinkedChestInterface {
         int amountFound = 0;
 
         for (Map.Entry<Location, String> loc : linkedChests.entrySet()) {
-            if (loc.getKey().getBlock().getType().equals(Material.CHEST)) {
+            if (isValidChest(loc.getKey().getBlock().getType()) ) {
                 if (loc.getKey().distance(npc.getBukkitEntity().getLocation()) < 10) {
                     for (Map.Entry<Integer, ? extends ItemStack> e : ((Chest) loc.getKey().getBlock().getState()).getBlockInventory().all(material).entrySet()) {
                         //for (ItemStack isfor : ((Chest) loc.getKey().getBlock().getState()).getBlockInventory()) {
@@ -93,47 +93,52 @@ public class LinkedChestTrait extends Trait implements LinkedChestInterface {
                 }
             } else {
                 // warn if owner is online, chest doesn't exist.
-                System.out.println("Chest doesn't exist: " + loc.getKey().getBlock().getType().toString());
+                //System.out.println("Chest doesn't exist: " + loc.getKey().getBlock().getType().toString());
             }
         }
         return checkAmount ? amount <= amountFound : amountFound > 0;
     }
 
     public boolean removeItem(ItemStack removeitem) {
-
-        for (Map.Entry<Location, String> loc : linkedChests.entrySet()) {
-            if (loc.getKey().getBlock().getType().equals(Material.CHEST)) {
+    	HashMap<Integer, ItemStack> soldItem = new HashMap<Integer, ItemStack>();
+    	soldItem.put(0, removeitem.clone());
+    	for (Map.Entry<Location, String> loc : linkedChests.entrySet()) {
+            if (isValidChest(loc.getKey().getBlock().getType()) && soldItem.get(0) != null) {
                 if (loc.getKey().distance(npc.getBukkitEntity().getLocation()) < 10) {
-                    ((Chest) loc.getKey().getBlock().getState()).getBlockInventory().remove(removeitem);
+                	soldItem = ((Chest) loc.getKey().getBlock().getState()).getBlockInventory().removeItem(soldItem.get(0));
                 } else {
                     // warn own that chest is to far away.
                 }
             } else {
                 // warn if owner is online, chest doesn't exist.
-                System.out.println("Chest doesn't exist: " + loc.getKey().getBlock().getType().toString());
+                // System.out.println("Chest doesn't exist: " + loc.getKey().getBlock().getType().toString());
             }
         }
-
-        if (removeitem.getAmount() > 0) {
+        if (soldItem.get(0) == null) {
             return false;
         }
         return true;
     }
 
     public boolean addItem(ItemStack iss) {
+    	HashMap<Integer, ItemStack> purchasedInv = new HashMap<Integer, ItemStack>();
+    	purchasedInv.put(0, iss);
         for (Map.Entry<Location, String> loc : linkedChests.entrySet()) {
-            if (loc.getKey().getBlock().getType().equals(Material.CHEST)) {
+            if (isValidChest(loc.getKey().getBlock().getType()) && purchasedInv.get(0) != null) {
                 if (loc.getKey().distance(npc.getBukkitEntity().getLocation()) < 10) {
-                    ((Chest) loc.getKey().getBlock().getState()).getBlockInventory().addItem(iss);
+                	purchasedInv = ((Chest) loc.getKey().getBlock().getState()).getBlockInventory().addItem(iss);
                 }
             }
+        }
+        if(purchasedInv != null){
+        	iss = purchasedInv.get(0);
         }
 
         return true;
     }
 
     public boolean setLinkedChest(Location loc, String catagory) {
-        if (loc.getBlock().getType().equals(Material.CHEST)) {
+        if (isValidChest(loc.getBlock().getType())) {
             linkedChests.put(loc, catagory);
             return true;
         }
@@ -167,38 +172,30 @@ public class LinkedChestTrait extends Trait implements LinkedChestInterface {
 
     public boolean hasSpace(ItemStack iss) {
         ItemStack is = iss.clone();
-
         for (Map.Entry<Location, String> loc : linkedChests.entrySet()) {
-            if (loc.getKey().getBlock().getType().equals(Material.CHEST)) {
-                if (loc.getKey().distance(npc.getBukkitEntity().getLocation()) < 10) {
-                    Inventory chchest = Bukkit.createInventory(null, ((Chest) loc.getKey().getBlock().getState()).getBlockInventory().getSize());
-                    /*for (ItemStack item : ((Chest) loc.getKey().getBlock().getState()).getBlockInventory()) {
-                        chchest.addItem(item);
-                    }*/
-                    for (int i = 0; i < chchest.getSize(); i++) {
-                        if (((Chest) loc.getKey().getBlock().getState()).getBlockInventory().getItem(i) != null) {
-                            ItemStack item = ((Chest) loc.getKey().getBlock().getState()).getBlockInventory().getItem(i).clone();
-                            chchest.setItem(i, item);
-                        }
+            if (isValidChest(loc.getKey().getBlock().getType()) && loc.getKey().distance(npc.getBukkitEntity().getLocation()) < 10) {
+                Inventory chchest = Bukkit.createInventory(null, ((Chest) loc.getKey().getBlock().getState()).getBlockInventory().getSize());
+                for (int i = 0; i < chchest.getSize(); i++) {
+                    if (((Chest) loc.getKey().getBlock().getState()).getBlockInventory().getItem(i) != null) {
+                        ItemStack item = ((Chest) loc.getKey().getBlock().getState()).getBlockInventory().getItem(i).clone();
+                        chchest.setItem(i, item);
                     }
-                    HashMap<Integer, ItemStack> returnItems = chchest.addItem(is);
-                    if (!returnItems.isEmpty()) {
-                        is = returnItems.get(0);
-                        /*for (Entry<Integer, ItemStack> item : returnItems.entrySet()) {
-                            System.out.println("Integer: " + item.getKey() + " ItemStack: " + item.getValue().toString());
-                        }*/
-                    } else {
-                        is.setAmount(0);
-                        break;
-                    }
+                }
+                HashMap<Integer, ItemStack> returnItems = chchest.addItem(is);
+                if (returnItems.isEmpty()) {
+                    return true;
+                } else {
+                	is = returnItems.get(0);
                 }
             }
         }
-
-        if (is.getAmount() > 0) {
-            return false;
-        }
-
-        return true;
+        return false;
+    }
+    
+    public static boolean isValidChest(Material material){
+    	if(material.equals(Material.CHEST) || material.equals(Material.TRAPPED_CHEST)){
+    		return true;
+    	}
+    	return false;
     }
 }

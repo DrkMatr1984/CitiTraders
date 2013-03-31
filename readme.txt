@@ -1,7 +1,24 @@
-CitiTraders Beta 2.0.4 README
-Bukkit 1.4.7 R1 and Citizens 2.0.7 beta
+CitiTraders Beta 2.0.5 README
+Bukkit 1.5.1 R0.1 and Citizens 2.0.8 dev
 
 In this release 
+===============
+Fully implemented saving of:
+	Enchanted books
+	Named items
+	dyed items.
+	
+Still lost during reloads
+	Written Books (Will try and work with the Citizens developers to fix this in Citizens)
+	
+Fixed linked chest shops with multiple chests
+Added support for trap Chests
+
+Fixed error in update notification when file name on bukket dev was miss typed.
+
+
+
+Release 2.0.4
 ===============
 Improved text on potion sell / buy list.
 
