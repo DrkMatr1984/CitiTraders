@@ -1,7 +1,18 @@
-CitiTraders Beta 2.0.5 README
-Bukkit 1.5.1 R0.1 and Citizens 2.0.8 dev
+CitiTraders Beta 2.0.6 README
+Bukkit 1.5.1 R0.2 and Citizens 2.0.8 dev
 
 In this release 
+===============
+Fixed display of item stack quantity in trader sale window.
+Added ability to turn on transactions logging to server log.
+	New config. value : Transactions-To-Log
+		Set to true to see transactions in server log.
+		
+Release 2.0.5a
+===============
+Fixed bug that was was forcing version 2.0.5 to always display as development build in update checking.
+
+Release 2.0.5
 ===============
 Fully implemented saving of:
 	Enchanted books

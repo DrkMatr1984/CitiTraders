@@ -232,7 +232,6 @@ public class Trader implements Listener {
         state.setTrader(npc);
         String owner = npc.getTrait(Owner.class).getOwner();
         
-        // TO DO: Add owner override
         if (Trader.hasOwnership(by, owner)) {
 
         	if(by.getItemInHand().getType() == Material.STICK){

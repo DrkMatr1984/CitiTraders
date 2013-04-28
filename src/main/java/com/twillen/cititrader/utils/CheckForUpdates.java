@@ -47,8 +47,8 @@ public class CheckForUpdates implements Runnable {
 					line = line.replaceAll("[^\\d.]", "");
 					if (lineNum == 1) {
 						try {
-							Integer newVer = Integer.parseInt(line.replace(".",""));
-							Integer oldVer = Integer.parseInt(version.replace(".",""));
+							int newVer = Integer.parseInt(line.replace(".",""));
+							int oldVer = Integer.parseInt(version.replace(".",""));
 							if(oldVer == newVer){
 								strVersionCheck = "You are on the current version.";
 							}

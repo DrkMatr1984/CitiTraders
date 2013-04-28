@@ -206,6 +206,7 @@ public class ShopTrait extends Trait implements TraderInterface {
 		i = 0;
 		for (Entry<ItemStack, Double> price : buyPrices.entrySet()) {
 			if (price.getValue() > 0.0D) {
+				
 				ItemStorage.saveItem(buyPriceIndex.getRelative("" + i).getRelative("item"), price.getKey());
 				if (buyStackSizes.containsKey(price.getKey())) {
 					sellPriceIndex.getRelative("" + i).setInt("stack", buyStackSizes.get(price.getKey()));
@@ -620,6 +621,12 @@ public class ShopTrait extends Trait implements TraderInterface {
 			player.sendMessage(ChatColor.GOLD + isold.getType().name() + "*" + isold.getAmount());
 			player.sendMessage(ChatColor.GOLD + "purchased");
 			player.sendMessage(ChatColor.GOLD + "" + cost);
+			
+			if (CitiTrader.self.getConfig().getBoolean("Transactions-To-Log", false)) {
+				CitiTrader.self.getLogger().log(Level.INFO, player.getName() + 
+						" purchased " + isold.getType().name() + "*" + isold.getAmount() + 
+						" for " + cost );
+			}
 
 			playerInv.addItem(isold);
 
@@ -695,11 +702,15 @@ public class ShopTrait extends Trait implements TraderInterface {
 						npc.getTrait(StockRoomTrait.class).addItem(is);
 					}
 				}
-
 				total += sale;
 				// take item
-
 				sellbox.setItem(i, null);
+
+				if (CitiTrader.self.getConfig().getBoolean("Transactions-To-Log", false)) {
+					CitiTrader.self.getLogger().log(Level.INFO, event.getPlayer().getName() + 
+						" sold " + is.getType().name() + "*" + is.getAmount() + 
+						" for " + sale );
+				}
 
 			}
 			((Player) event.getPlayer()).sendMessage("Total money from sale to trader: " + total);
@@ -771,6 +782,7 @@ public class ShopTrait extends Trait implements TraderInterface {
 									}
 									ItemStack chk;
 									chk = is.clone();
+									chk.setAmount(1);
 									if (inv.contains(chk) == false && getSellPrice(is) > 0.0D) {
 										inv.addItem(chk);
 									}
@@ -789,6 +801,7 @@ public class ShopTrait extends Trait implements TraderInterface {
 						}
 						ItemStack chk;
 						chk = is.clone();
+						chk.setAmount(1);
 						if (inv.contains(chk) == false && getSellPrice(is) > 0.0D) {
 							inv.addItem(chk);
 						}

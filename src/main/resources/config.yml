@@ -10,6 +10,7 @@ trader-types:
 - IRON_GOLEM
 - VILLAGER
 Check-For-Updates: true
+Transactions-To-Log: false
 debug:
   tradercount: false
   debugText: false
