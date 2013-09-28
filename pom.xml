@@ -10,9 +10,8 @@
     <properties>
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <bukkit.version>1.4.2-R0.2</bukkit.version>
-        <citizensapi.version>2.0.4-SNAPSHOT</citizensapi.version>
-        <vault.version>1.2.20-SNAPSHOT</vault.version>
+        <bukkit.version>1.6.4-R0.1-SNAPSHOT</bukkit.version>
+        <vault.version>1.2.27-SNAPSHOT</vault.version>
         
     </properties>
 
@@ -29,10 +28,6 @@
             <id>Plugin Metrics</id>
             <url>http://repo.mcstats.org/content/repositories/public</url>
         </repository>
-        <repository>
-            <id>everything</id>
-            <url>http://repo.citizensnpcs.com</url>
-        </repository>
     </repositories>
 
     <dependencies>
@@ -45,22 +40,23 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>${bukkit.version}</version>
+            <version>1.6.4-R0.1-SNAPSHOT</version>
+            <scope>compile</scope>
             <type>jar</type>
         </dependency>
         <dependency>
             <groupId>net.citizensnpcs</groupId>
             <artifactId>citizensapi</artifactId>
-            <version>${citizensapi.version}</version>
-            <type>jar</type>
-            <scope>compile</scope>
+            <version>2.0.10</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/Citizens.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>net.citizensnpcs</groupId>
             <artifactId>citizens</artifactId>
-            <version>${citizensapi.version}</version>
-            <type>jar</type>
-            <scope>compile</scope>
+            <version>2.0.10</version>
+            <scope>system</scope>
+            <systemPath>${basedir}/lib/Citizens.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
