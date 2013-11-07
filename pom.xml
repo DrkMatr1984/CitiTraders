@@ -10,7 +10,8 @@
     <properties>
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <bukkit.version>1.6.4-R0.1-SNAPSHOT</bukkit.version>
+        <bukkit.version>1.6.4-R2.1-SNAPSHOT</bukkit.version>
+        <citizensapi.version>2.0.10-SNAPSHOT</citizensapi.version>
         <vault.version>1.2.27-SNAPSHOT</vault.version>
         
     </properties>
@@ -22,11 +23,15 @@
         </repository>
         <repository>
             <id>vault-repo</id>
-            <url>http://ci.herocraftonline.com/plugin/repository/everything</url>
+            <url>http://ci.herocraftonline.com/plugin/repository/everything/</url>
         </repository>
         <repository>
             <id>Plugin Metrics</id>
-            <url>http://repo.mcstats.org/content/repositories/public</url>
+            <url>http://repo.mcstats.org/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
+            <id>everything</id>
+            <url>http://ci.citizensnpcs.co/plugin/repository/everything/</url>
         </repository>
     </repositories>
 
@@ -34,29 +39,28 @@
         <dependency>
             <groupId>org.mcstats</groupId>
             <artifactId>metrics</artifactId>
-            <version>1.1</version>
+            <version>1.2-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.6.4-R0.1-SNAPSHOT</version>
-            <scope>compile</scope>
+            <version>${bukkit.version}</version>
             <type>jar</type>
         </dependency>
         <dependency>
             <groupId>net.citizensnpcs</groupId>
             <artifactId>citizensapi</artifactId>
-            <version>2.0.10</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/Citizens.jar</systemPath>
+            <version>${citizensapi.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>net.citizensnpcs</groupId>
             <artifactId>citizens</artifactId>
-            <version>2.0.10</version>
-            <scope>system</scope>
-            <systemPath>${basedir}/lib/Citizens.jar</systemPath>
+            <version>${citizensapi.version}</version>
+            <type>jar</type>
+            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>net.milkbowl.vault</groupId>
@@ -66,12 +70,12 @@
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
-            <version>3.8.1</version>
+            <version>4.11</version>
         </dependency>
         <dependency>
             <groupId>com.palmergames</groupId>
             <artifactId>Towny</artifactId>
-            <version>0.81</version>
+            <version>0.84</version>
             <scope>system</scope>
             <systemPath>${basedir}/lib/Towny.jar</systemPath>
         </dependency>

@@ -21,6 +21,7 @@ public class CheckForUpdates implements Runnable {
 		this.plugin = plugin;
 	}
 
+	@Override
 	public void run() {
 		try {
 			/*

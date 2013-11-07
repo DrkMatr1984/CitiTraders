@@ -730,6 +730,7 @@ public class ShopTrait extends Trait implements TraderInterface {
 
 	public void buildSellWindow(final ItemStack item, final TraderStatus state) {
 		CitiTrader.self.getServer().getScheduler().runTaskLaterAsynchronously(CitiTrader.self, new Runnable() {
+			@Override
 			public void run() {
 				for (int i = 0; i < 54; i++) {
 					state.getInventory().setItem(i, null);
@@ -763,6 +764,7 @@ public class ShopTrait extends Trait implements TraderInterface {
 
 	public void buildSalesWindow(final Inventory inv) {// scheduleAsyncDelayedTask
 		CitiTrader.self.getServer().getScheduler().runTaskAsynchronously(CitiTrader.self, new Runnable() {
+			@Override
 			public void run() {
 				// clear the inventory
 				for (int i = 0; i < 54; i++) {
