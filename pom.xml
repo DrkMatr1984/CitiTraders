@@ -31,7 +31,7 @@
         </repository>
         <repository>
             <id>everything</id>
-            <url>http://ci.citizensnpcs.co/plugin/repository/everything/</url>
+            <url>http://http://repo.citizensnpcs.co/</url>
         </repository>
     </repositories>
 
