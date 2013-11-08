@@ -30,7 +30,7 @@
         </repository>
         <repository>
             <id>everything</id>
-            <url>http://http://repo.citizensnpcs.co/</url>
+            <url>http://repo.citizensnpcs.co/</url>
         </repository>
     </repositories>
 
