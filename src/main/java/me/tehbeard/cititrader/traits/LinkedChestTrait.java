@@ -6,10 +6,12 @@ package me.tehbeard.cititrader.traits;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import me.tehbeard.cititrader.CitiTrader;
 import me.tehbeard.cititrader.LinkedChestInterface;
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.util.DataKey;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -70,7 +72,8 @@ public class LinkedChestTrait extends Trait implements LinkedChestInterface {
 
     }
 
-    public boolean hasStock(ItemStack locate) {
+    @SuppressWarnings("deprecation")
+	public boolean hasStock(ItemStack locate) {
         ItemStack is = locate.clone();
         Material material = locate.getType();
         int amount = locate.getAmount();
@@ -99,7 +102,8 @@ public class LinkedChestTrait extends Trait implements LinkedChestInterface {
         return checkAmount ? amount <= amountFound : amountFound > 0;
     }
 
-    public boolean removeItem(ItemStack removeitem) {
+    @SuppressWarnings("deprecation")
+	public boolean removeItem(ItemStack removeitem) {
     	HashMap<Integer, ItemStack> soldItem = new HashMap<Integer, ItemStack>();
     	soldItem.put(0, removeitem.clone());
     	for (Map.Entry<Location, String> loc : linkedChests.entrySet()) {
@@ -120,7 +124,8 @@ public class LinkedChestTrait extends Trait implements LinkedChestInterface {
         return true;
     }
 
-    public boolean addItem(ItemStack iss) {
+    @SuppressWarnings("deprecation")
+	public boolean addItem(ItemStack iss) {
     	HashMap<Integer, ItemStack> purchasedInv = new HashMap<Integer, ItemStack>();
     	purchasedInv.put(0, iss);
         for (Map.Entry<Location, String> loc : linkedChests.entrySet()) {
@@ -170,7 +175,8 @@ public class LinkedChestTrait extends Trait implements LinkedChestInterface {
         return false;
     }
 
-    public boolean hasSpace(ItemStack iss) {
+    @SuppressWarnings("deprecation")
+	public boolean hasSpace(ItemStack iss) {
         ItemStack is = iss.clone();
         for (Map.Entry<Location, String> loc : linkedChests.entrySet()) {
             if (isValidChest(loc.getKey().getBlock().getType()) && loc.getKey().distance(npc.getBukkitEntity().getLocation()) < 10) {

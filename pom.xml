@@ -3,15 +3,15 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>me.tehbeard</groupId>
     <artifactId>CitiTrader</artifactId>
-    <version>BETA-2.0</version>
+    <version>BETA-2.0.7</version>
     <name>CitiTrader</name>
     <description>Trader for citizens</description>
 
     <properties>
         
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <bukkit.version>1.7.2-R0.3-SNAPSHOT</bukkit.version>
-        <vault.version>1.2.27-SNAPSHOT</vault.version>
+        <bukkit.version>1.7.9-R0.2</bukkit.version>
+        <vault.version>1.4.1</vault.version>
         
     </properties>
 
@@ -22,7 +22,7 @@
         </repository>
         <repository>
             <id>vault-repo</id>
-            <url>http://ci.herocraftonline.com/plugin/repository/everything/</url>
+            <url>http://nexus.theyeticave.net/content/repositories/pub_releases/</url>
         </repository>
         <repository>
             <id>Plugin Metrics</id>
@@ -50,14 +50,14 @@
         <dependency>
             <groupId>net.citizensnpcs</groupId>
             <artifactId>citizensapi</artifactId>
-            <version>2.0.11-SNAPSHOT</version>
+            <version>2.0.13-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>net.citizensnpcs</groupId>
             <artifactId>citizens</artifactId>
-            <version>2.0.11-SNAPSHOT</version>
+            <version>2.0.13-SNAPSHOT</version>
             <type>jar</type>
             <scope>compile</scope>
         </dependency>
@@ -74,7 +74,7 @@
         <dependency>
             <groupId>com.palmergames</groupId>
             <artifactId>Towny</artifactId>
-            <version>0.84.0.9</version>
+            <version>0.88.0.1</version>
             <scope>system</scope>
             <systemPath>${basedir}/lib/Towny.jar</systemPath>
         </dependency>

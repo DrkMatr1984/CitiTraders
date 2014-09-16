@@ -15,6 +15,7 @@ import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.trait.MobType;
 import net.citizensnpcs.api.trait.trait.Owner;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -34,7 +35,6 @@ public class CitiCommands implements CommandExecutor {
         plugin = instance;
     }
 
-    @Override
     public boolean onCommand(CommandSender sender, Command command,
             String label, String[] args) {
         
@@ -309,6 +309,8 @@ public class CitiCommands implements CommandExecutor {
 
                 return true;
             }
+		default:
+			break;
         }
         return false;
     }
@@ -379,7 +381,8 @@ public class CitiCommands implements CommandExecutor {
         return s;
     }
 
-    public boolean create(CommandSender sender, Command command, String label, String[] args) {
+    @SuppressWarnings("deprecation")
+	public boolean create(CommandSender sender, Command command, String label, String[] args) {
         Player player = (Player) sender;
         ArgumentPack argPack = new ArgumentPack(new String[0], new String[]{"type", "style"}, compact(args, 1));
         EntityType npcType = EntityType.PLAYER;

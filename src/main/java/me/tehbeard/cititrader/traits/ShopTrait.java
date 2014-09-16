@@ -59,6 +59,7 @@ public class ShopTrait extends Trait implements TraderInterface {
 		isStatic = false;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void load(DataKey data) throws NPCLoadException {
 		// load selling prices
@@ -150,6 +151,7 @@ public class ShopTrait extends Trait implements TraderInterface {
 		isStatic = data.getBoolean("static");
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void save(DataKey data) {
 
@@ -560,11 +562,14 @@ public class ShopTrait extends Trait implements TraderInterface {
 				event.setCancelled(true);
 			}
 		}
+		default:
+			break;
 
 		}
 
 	}
 
+	@SuppressWarnings("deprecation")
 	private void sellToPlayer(Player player, NPC npc, final ItemStack isold) {
 		ShopTrait store = npc.getTrait(ShopTrait.class);
 		TraderStatus state = Trader.getStatus(player.getName());
@@ -634,6 +639,7 @@ public class ShopTrait extends Trait implements TraderInterface {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public void processInventoryClose(InventoryCloseEvent event) {
 		TraderStatus state = Trader.getStatus(event.getPlayer().getName());
 
@@ -730,7 +736,6 @@ public class ShopTrait extends Trait implements TraderInterface {
 
 	public void buildSellWindow(final ItemStack item, final TraderStatus state) {
 		CitiTrader.self.getServer().getScheduler().runTaskLaterAsynchronously(CitiTrader.self, new Runnable() {
-			@Override
 			public void run() {
 				for (int i = 0; i < 54; i++) {
 					state.getInventory().setItem(i, null);
@@ -764,7 +769,7 @@ public class ShopTrait extends Trait implements TraderInterface {
 
 	public void buildSalesWindow(final Inventory inv) {// scheduleAsyncDelayedTask
 		CitiTrader.self.getServer().getScheduler().runTaskAsynchronously(CitiTrader.self, new Runnable() {
-			@Override
+			@SuppressWarnings("deprecation")
 			public void run() {
 				// clear the inventory
 				for (int i = 0; i < 54; i++) {

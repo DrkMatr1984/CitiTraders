@@ -2,11 +2,13 @@ package me.tehbeard.cititrader;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import net.citizensnpcs.api.exception.NPCLoadException;
 import net.citizensnpcs.api.trait.Trait;
 import net.citizensnpcs.api.trait.trait.Owner;
 import net.citizensnpcs.api.util.DataKey;
 import net.milkbowl.vault.economy.EconomyResponse;
+
 import org.bukkit.permissions.Permissible;
 
 /**
@@ -60,7 +62,8 @@ public class WalletTrait extends Trait {
      * @param amount
      * @return
      */
-    public boolean deposit(double amount) {
+    @SuppressWarnings("deprecation")
+	public boolean deposit(double amount) {
         if (amount <= 0) {
             return false;
         }
@@ -93,7 +96,8 @@ public class WalletTrait extends Trait {
      * @param amount
      * @return
      */
-    public boolean withdraw(double amount) {
+    @SuppressWarnings("deprecation")
+	public boolean withdraw(double amount) {
         if (amount <= 0) {
             return false;
         }
@@ -130,7 +134,8 @@ public class WalletTrait extends Trait {
      * @param amount
      * @return
      */
-    public boolean has(double amount) {
+    @SuppressWarnings("deprecation")
+	public boolean has(double amount) {
         if (amount <= 0) {
             return false;
         }
@@ -170,7 +175,8 @@ public class WalletTrait extends Trait {
         this.account = account;
     }
 
-    public final double getAmount() {
+    @SuppressWarnings("deprecation")
+	public final double getAmount() {
         switch (type) {
             case PRIVATE:
                 return this.amount;

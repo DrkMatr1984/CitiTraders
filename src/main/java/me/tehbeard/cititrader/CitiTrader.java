@@ -7,6 +7,9 @@ import java.util.jar.Attributes;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+
+
+
 //import me.tehbeard.cititrader.commands.CitiCommands;
 import me.tehbeard.cititrader.commands.CitiCommands;
 import me.tehbeard.cititrader.traits.LinkedChestTrait;
@@ -17,6 +20,7 @@ import net.citizensnpcs.api.CitizensAPI;
 import net.citizensnpcs.api.npc.NPC;
 import net.citizensnpcs.api.trait.TraitInfo;
 import net.milkbowl.vault.economy.Economy;
+
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -194,6 +198,7 @@ public class CitiTrader extends JavaPlugin {
 		this.saveConfig();
 	}
 
+	@SuppressWarnings("deprecation")
 	public void reloadProfiles() {
 		profilesFile = new File(this.getDataFolder(), "profiles.yml");
 		profiles = YamlConfiguration.loadConfiguration(profilesFile);
@@ -229,6 +234,7 @@ public class CitiTrader extends JavaPlugin {
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public void reloadLanguage() {
 		languageFile = new File(this.getDataFolder() + File.separator + "lang",
 				getConfig().getString("language") + ".yml");
@@ -246,6 +252,7 @@ public class CitiTrader extends JavaPlugin {
 		this.saveLanguage();
 	}
 
+	@SuppressWarnings("deprecation")
 	public void resetLanguage() {
 		InputStream defConfigStream = this.getResource("en.yml");
 		languages = YamlConfiguration.loadConfiguration(defConfigStream);

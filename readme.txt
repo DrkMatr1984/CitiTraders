@@ -1,5 +1,5 @@
-CitiTraders Beta 2.0.6 README
-Bukkit 1.7.2 R0.3 and Citizens 2.0.11 dev
+CitiTraders Beta 2.0.7 README
+Bukkit 1.7.9 R0.2 and Citizens 2.0.13 dev
 
 In this release 
 ===============

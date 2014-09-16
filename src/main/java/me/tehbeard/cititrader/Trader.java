@@ -2,12 +2,14 @@ package me.tehbeard.cititrader;
 
 import me.tehbeard.cititrader.traits.StockRoomTrait;
 import me.tehbeard.cititrader.traits.ShopTrait;
+
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.logging.Level;
+
 import me.tehbeard.cititrader.CitiTrader.Style;
 import me.tehbeard.cititrader.TraderStatus.Status;
 import me.tehbeard.cititrader.WalletTrait.WalletType;
@@ -208,7 +210,8 @@ public class Trader implements Listener {
         }
     }
 
-    @EventHandler
+    @SuppressWarnings({ "incomplete-switch", "deprecation" })
+	@EventHandler
     public void onRightClick(NPCRightClickEvent event) {
         NPC npc = event.getNPC();
         Player by = event.getClicker();
